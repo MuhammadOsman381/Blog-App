@@ -1,0 +1,78 @@
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model User {
+    userId    Int       @id @default(autoincrement())
+    email     String    @unique
+    name      String
+    password  String
+    image     String?
+    blogs     Blog[]
+    comments  Comment[]
+    likes     Like[]
+    dislikes  Dislike[]
+    tags      Tag[]
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+}
+
+model Blog {
+    blogId      Int       @id @default(autoincrement())
+    title       String
+    description String    @db.Text
+    images      Json?
+    userId      Int
+    user        User      @relation(fields: [userId], references: [userId])
+    comments    Comment[]
+    likes       Like[]
+    dislikes    Dislike[]
+    tags        Json
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+}
+
+model Comment {
+    commentId Int      @id @default(autoincrement())
+    comment   String
+    userId    Int
+    userName  String
+    userImage String
+    user      User     @relation(fields: [userId], references: [userId])
+    blogId    Int
+    blog      Blog     @relation(fields: [blogId], references: [blogId])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Like {
+    likeId    Int      @id @default(autoincrement())
+    blogId    Int
+    blog      Blog     @relation(fields: [blogId], references: [blogId])
+    userId    Int
+    user      User     @relation(fields: [userId], references: [userId])
+    createdAt DateTime @default(now())
+}
+
+model Dislike {
+    dislikeId Int      @id @default(autoincrement())
+    blogId    Int
+    blog      Blog     @relation(fields: [blogId], references: [blogId])
+    userId    Int
+    user      User     @relation(fields: [userId], references: [userId])
+    createdAt DateTime @default(now())
+}
+
+model Tag {
+    tagId      Int      @id @default(autoincrement())
+    tagName    String
+    userId     Int
+    user       User     @relation(fields: [userId], references: [userId])
+    createdAt  DateTime @default(now())
+    userUserId Int?
+}

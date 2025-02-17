@@ -1,0 +1,31 @@
+html {
+    scroll-behavior: smooth;
+}
+
+/* For Chrome, Safari, and Opera */
+.container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* For IE, Edge */
+  .container {
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+  
+  /* For Firefox */
+  .container {
+    scrollbar-width: none; /* Firefox */
+  }
+  
+
+
+
+.hide-scrollbar{
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/* Hide scrollbar for Webkit browsers */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
