@@ -1,11 +1,9 @@
 import BlogCard from "@/components/BlogCard";
 import DotLoader from "@/components/DotLoader";
 import SpinnerLoader from "@/components/SpinLoader";
-import { Input } from "@/components/ui/input";
 import Helpers from "@/config/Helpers";
 import useGetAndDelete from "@/hooks/useGetAndDelete";
 import usePostAndPut from "@/hooks/usePostAndPut";
-import { Label } from "@radix-ui/react-label";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { FaEdit, FaUser } from "react-icons/fa";
