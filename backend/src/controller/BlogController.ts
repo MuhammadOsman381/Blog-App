@@ -120,4 +120,72 @@ const DeleteBlogByID: RequestHandler = async (req: Request, res: Response, next:
 };
 
 
-export { CreateBlog, GetAllBlogs, GetUserBlogs, GetBlogByID, DeleteBlogByID };
+
+const LikeOrDislike: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const blogID = Number(req.params.blogID);
+        const user = (req as any).user;
+        const { reaction } = req.body;
+
+        ApiResponse(res, true, 200, "Working fine!",);
+    } catch (error) {
+        ApiResponse(res, false, 500, "There is something wrong!");
+        next(error);
+    }
+};
+
+
+const GetUserReaction: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const user = (req as any).user;
+        const { blogId } = req.params; 
+
+        if (!blogId) {
+            ApiResponse(res, false, 400, "Blog ID is required!");
+            return
+
+        }
+
+        // Convert blogId to number
+        const blogIdNum = parseInt(blogId, 10);
+        if (isNaN(blogIdNum)) {
+            ApiResponse(res, false, 400, "Invalid Blog ID format!");
+            return 
+        }
+
+        let status: string = "None";
+
+        // Check if user has liked or disliked the blog
+        const isLiked = await prisma.like.findFirst({
+            where: {
+                userId: user.userId,
+                blogId: blogIdNum,
+            }
+        });
+
+        const isDisliked = await prisma.dislike.findFirst({
+            where: {
+                userId: user.userId,
+                blogId: blogIdNum,
+            }
+        });
+
+        if (isLiked) {
+            status = "Liked";
+        } else if (isDisliked) {
+            status = "Disliked";
+        }
+
+        console.log(status)
+
+        console.log("User:", user);
+        ApiResponse(res, true, 200, "Reaction fetched successfully!", { status });
+
+    } catch (error) {
+        console.error("Error fetching user reaction:", error);
+        ApiResponse(res, false, 500, "Something went wrong!");
+        next(error);
+    }
+};
+
+export { CreateBlog, GetAllBlogs, GetUserBlogs, GetBlogByID, DeleteBlogByID, LikeOrDislike, GetUserReaction };

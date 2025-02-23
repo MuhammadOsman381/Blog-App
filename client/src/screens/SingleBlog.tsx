@@ -26,6 +26,8 @@ const SingleBlog = () => {
     const get = useGetAndDelete(axios.get);
     const post = usePostAndPut(axios.post);
     const deleteComment = useGetAndDelete(axios.delete);
+    const getReaction = useGetAndDelete(axios.get);
+
     const getSingleBlog = async () => {
         await get.callApi(`blog/get-blog/${blogId}`, false, false);
     };
@@ -44,18 +46,27 @@ const SingleBlog = () => {
             await getSingleBlog()
         }
     };
+
+    const blog = get?.response?.data?.blog;
+    const userId = get?.response?.data?.user;
+
+    
     const handleCommentDelete = async (id: number) => {
         await deleteComment.callApi(`comment/delete/${id}`, false, false)
         await getSingleBlog();
     }
 
+    const getUserReaction = async () => {
+        const res = await getReaction.callApi(`blog/get-user-reaction/${blog.blogID}`,false,false)
+        console.log(res)
+    }
+
     useEffect(() => {
         getSingleBlog();
+        getUserReaction()
     }, [blogId]);
 
-    const blog = get?.response?.data?.blog;
-    const userId = get?.response?.data?.user;
-
+   
 
     return (
         <div className="p-10">

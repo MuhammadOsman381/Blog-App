@@ -146,7 +146,7 @@ const CreateBlog = () => {
             const prompt = `please generate blog for this title "${title}"`
             try {
                 const response = await axios({
-                    url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDdERGCkujR4KDx-Pxri4eDZxvBNyR0B2A`,
+                    url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
                     method: 'post',
                     data: { contents: [{ parts: [{ text: prompt }] }] },
                 });
